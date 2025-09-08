@@ -1,0 +1,154 @@
+{% extends 'admin_base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Edit Member - {{ member.name }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4 d-flex align-items-center">
+          <i class="fas fa-edit fa-2x me-3"></i>
+          <h2 class="mb-0">Edit Member</h2>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="{{ form.name.id_for_label }}" class="form-label">Full Name</label>
+                {{ form.name|add_class:"form-control" }}
+                {% if form.name.errors %}
+                  <div class="text-danger small">{{ form.name.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                {{ form.username|add_class:"form-control" }}
+                {% if form.username.errors %}
+                  <div class="text-danger small">{{ form.username.errors.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="{{ form.email.id_for_label }}" class="form-label">Email Address</label>
+                {{ form.email|add_class:"form-control" }}
+                {% if form.email.errors %}
+                  <div class="text-danger small">{{ form.email.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="{{ form.phone.id_for_label }}" class="form-label">Phone Number</label>
+                {{ form.phone|add_class:"form-control" }}
+                {% if form.phone.errors %}
+                  <div class="text-danger small">{{ form.phone.errors.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="{{ form.address.id_for_label }}" class="form-label">Address</label>
+              {{ form.address|add_class:"form-control address-field" }}
+              {% if form.address.errors %}
+                <div class="text-danger small">{{ form.address.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+              {{ form.password|add_class:"form-control" }}
+              {% if form.password.errors %}
+                <div class="text-danger small">{{ form.password.errors.0 }}</div>
+              {% endif %}
+              <small class="text-muted">Leave blank to keep current password</small>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <a href="{% url 'member_detail' member.id %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Cancel
+              </a>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Update Member
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    background: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+
+  .card {
+    border: none;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #495057;
+  }
+
+  .form-control {
+    border-radius: 0.5rem;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+
+  .btn {
+    border-radius: 0.5rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #4a90e2 0%, #357ABD 100%);
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #357ABD 0%, #4a90e2 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-outline-secondary {
+    border: 2px solid #6c757d;
+    color: #6c757d;
+  }
+
+  .btn-outline-secondary:hover {
+    background: #e9ecef;
+    color: #495057;
+    transform: translateY(-2px);
+  }
+
+  .text-danger {
+    font-weight: 500;
+  }
+
+  .address-field {
+    min-height: 60px !important;
+    max-height: 80px !important;
+    resize: vertical;
+  }
+</style>
+{% endblock %}

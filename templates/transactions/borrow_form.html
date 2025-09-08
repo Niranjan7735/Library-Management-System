@@ -1,0 +1,60 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Borrow Book - Library Management System{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Borrow Book</h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="mb-3">
+                            {% for message in messages %}
+                                <div class="alert alert-info">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <div class="mb-4">
+                        <h5>Book Information</h5>
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ book.title }}</h6>
+                                <p class="card-text text-muted">by {{ book.author }}</p>
+                                <p class="card-text"><strong>ISBN:</strong> {{ book.isbn }}</p>
+                                <p class="card-text">
+                                    <strong>Status:</strong> 
+                                    <span class="badge {% if book.availability_status %}status-active{% else %}status-unavailable{% endif %}">
+                                        <i class="fas {% if book.availability_status %}fa-check-circle{% else %}fa-times-circle{% endif %} me-1"></i>
+                                        {% if book.availability_status %}Available{% else %}Unavailable{% endif %}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="member" class="form-label">Select Member:</label>
+                            <select name="member" id="member" class="form-select" required>
+                                <option value="">Select a member</option>
+                                {% for member in members %}
+                                <option value="{{ member.id }}">{{ member.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">Borrow Book</button>
+                            <a href="{% url 'book_detail' book.id %}" class="btn btn-outline-secondary btn-lg ms-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,287 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Add New Book - Library Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <!-- Header Section -->
+            <div class="dashboard-card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>Add New Book
+                    </h3>
+                    <p class="card-subtitle mb-0 mt-1 opacity-75">Enter book details to add to the library collection</p>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST" novalidate class="needs-validation">
+                        {% csrf_token %}
+
+                        <!-- Non-field errors -->
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endif %}
+
+                        <!-- Book Information Section -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="mb-3 text-primary">
+                                    <i class="fas fa-book me-2"></i>Book Information
+                                </h5>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Title -->
+                            <div class="col-md-8 mb-3">
+                                <label for="{{ form.title.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-heading me-1"></i>Title <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-book"></i></span>
+                                    {{ form.title }}
+                                </div>
+                                {% if form.title.errors %}
+                                    <div class="text-danger mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ form.title.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.title.help_text %}
+                                    <div class="form-text">{{ form.title.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Author -->
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.author.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-user me-1"></i>Author <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    {{ form.author }}
+                                </div>
+                                {% if form.author.errors %}
+                                    <div class="text-danger mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ form.author.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- ISBN -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.isbn.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-hashtag me-1"></i>ISBN <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+                                    {{ form.isbn }}
+                                </div>
+                                {% if form.isbn.errors %}
+                                    <div class="text-danger mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ form.isbn.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.isbn.help_text %}
+                                    <div class="form-text">{{ form.isbn.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Category -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.category.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-tags me-1"></i>Category
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-tags"></i></span>
+                                    {{ form.category }}
+                                </div>
+                                {% if form.category.errors %}
+                                    <div class="text-danger mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ form.category.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Publication Details Section -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h5 class="mb-3 text-primary">
+                                    <i class="fas fa-calendar me-2"></i>Publication Details
+                                </h5>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Published Date -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.published_date.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-calendar me-1"></i>Published Date
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                    {{ form.published_date }}
+                                </div>
+                                {% if form.published_date.errors %}
+                                    <div class="text-danger mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ form.published_date.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Quantity -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.quantity.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-sort-numeric-up me-1"></i>Quantity <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-sort-numeric-up"></i></span>
+                                    {{ form.quantity }}
+                                </div>
+                                {% if form.quantity.errors %}
+                                    <div class="text-danger mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ form.quantity.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.quantity.help_text %}
+                                    <div class="form-text">{{ form.quantity.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Description Section -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h5 class="mb-3 text-primary">
+                                    <i class="fas fa-align-left me-2"></i>Description
+                                </h5>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <label for="{{ form.description.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-align-left me-1"></i>Book Description
+                                </label>
+                                {{ form.description }}
+                                {% if form.description.errors %}
+                                    <div class="text-danger mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ form.description.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.description.help_text %}
+                                    <div class="form-text">{{ form.description.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Availability Section -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h5 class="mb-3 text-primary">
+                                    <i class="fas fa-check-circle me-2"></i>Availability
+                                </h5>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <div class="form-check">
+                                    {{ form.availability_status }}
+                                    <label for="{{ form.availability_status.id_for_label }}" class="form-check-label fw-bold">
+                                        <i class="fas fa-check-circle me-1"></i>Mark as Available for Borrowing
+                                    </label>
+                                    {% if form.availability_status.errors %}
+                                        <div class="text-danger mt-1">
+                                            <i class="fas fa-exclamation-circle me-1"></i>{{ form.availability_status.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {% if form.availability_status.help_text %}
+                                        <div class="form-text">{{ form.availability_status.help_text }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="{% url 'book_list' %}" class="btn btn-outline-secondary">
+                                        <i class="fas fa-arrow-left me-1"></i>Back to Books
+                                    </a>
+                                    <div class="d-flex gap-2">
+                                        <button type="reset" class="btn btn-outline-warning">
+                                            <i class="fas fa-undo me-1"></i>Reset
+                                        </button>
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="fas fa-save me-1"></i>Add Book
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Tips for Adding Books
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0 small">
+                        <li><strong>Title & Author:</strong> Required fields marked with <span class="text-danger">*</span></li>
+                        <li><strong>ISBN:</strong> Enter the 13-digit ISBN for accurate book identification</li>
+                        <li><strong>Quantity:</strong> Number of copies available in the library</li>
+                        <li><strong>Description:</strong> Optional but recommended for better book discovery</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-card .card-header {
+    border-bottom: none;
+    padding: 1.5rem;
+}
+
+.dashboard-card .card-body {
+    padding: 2rem;
+}
+
+.input-group-text {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+.btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+}
+
+.form-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.opacity-75 {
+    opacity: 0.75;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,505 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}{{ member.name }} - Library Management System{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4 d-flex align-items-center">
+          <i class="fas fa-user fa-2x me-3"></i>
+          <h2 class="mb-0">{{ member.name }}</h2>
+        </div>
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-3 text-center mb-3 mb-md-0">
+              <div class="member-avatar-container">
+                <div class="member-avatar-placeholder rounded-3 d-flex align-items-center justify-content-center bg-secondary text-white mx-auto" style="height: 100px; width: 100px;">
+                  <i class="fas fa-user fa-lg"></i>
+                </div>
+                <div class="mt-2">
+                  {% if member.status == 'active' %}
+                    <span class="badge bg-success fs-6 px-2 py-1">
+                      <i class="fas fa-check-circle me-1"></i>Active
+                    </span>
+                  {% else %}
+                    <span class="badge bg-danger fs-6 px-2 py-1">
+                      <i class="fas fa-times-circle me-1"></i>Inactive
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-9">
+              <div class="member-info-grid">
+                <div class="row g-2">
+                  <div class="col-sm-6">
+                    <div class="info-item">
+                      <i class="fas fa-envelope text-primary me-2"></i>
+                      <span class="info-label">Email:</span>
+                      <span class="info-value">{{ member.email }}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="info-item">
+                      <i class="fas fa-phone text-success me-2"></i>
+                      <span class="info-label">Phone:</span>
+                      <span class="info-value">{{ member.phone }}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="info-item">
+                      <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                      <span class="info-label">Address:</span>
+                      <span class="info-value">{{ member.address }}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="info-item">
+                      <i class="fas fa-calendar-plus text-info me-2"></i>
+                      <span class="info-label">Member Since:</span>
+                      <span class="info-value">{{ member.membership_date|date:"M d, Y" }}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="info-item">
+                      <i class="fas fa-user-plus text-warning me-2"></i>
+                      <span class="info-label">Joined:</span>
+                      <span class="info-value">{{ member.joined_date|date:"M d, Y" }}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="info-item">
+                      <i class="fas fa-user-tag text-secondary me-2"></i>
+                      <span class="info-label">Username:</span>
+                      <span class="info-value">{{ member.username }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer d-flex flex-wrap justify-content-center gap-3">
+          <a href="{% url 'member_list' %}" class="btn btn-outline-primary btn-lg px-4">
+            <i class="fas fa-arrow-left me-2"></i>Back to Members
+          </a>
+
+          {% if is_staff %}
+          <a href="{% url 'edit_member' member.id %}" class="btn btn-outline-warning btn-lg px-4">
+            <i class="fas fa-edit me-2"></i>Edit Member
+          </a>
+
+          <a href="{% url 'delete_member' member.id %}" class="btn btn-outline-danger btn-lg px-4" onclick="return confirm('Are you sure you want to delete this member?');">
+            <i class="fas fa-trash me-2"></i>Delete Member
+          </a>
+          {% endif %}
+
+          <button type="button" class="btn btn-outline-secondary btn-lg px-4" onclick="window.print()">
+            <i class="fas fa-print me-2"></i>Print Details
+          </button>
+        </div>
+      </div>
+
+      <!-- Borrowing History Section -->
+      {% if borrowing_history %}
+      <div class="card shadow-sm rounded-4 mt-4">
+        <div class="card-header bg-info text-white rounded-top-4">
+          <h5 class="mb-0">
+            <i class="fas fa-history me-2"></i>Borrowing History
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-4">
+            {% for transaction in borrowing_history %}
+            <div class="col-md-6 mb-4">
+              <div class="transaction-box card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                  <div class="d-flex align-items-start mb-3">
+                    <div class="transaction-icon me-3">
+                      <i class="fas fa-book fa-2x text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="card-title mb-3 fw-bold text-dark">
+                        {{ transaction.book.title }}
+                      </h6>
+                      <div class="transaction-details">
+                        <div class="detail-item mb-2">
+                          <i class="fas fa-calendar-check text-success me-2"></i>
+                          <span class="detail-label">Borrowed:</span>
+                          <span class="detail-value fw-semibold">{{ transaction.borrow_date|date:"M d, Y" }}</span>
+                        </div>
+                        {% if transaction.return_date %}
+                        <div class="detail-item mb-3">
+                          <i class="fas fa-calendar-times text-danger me-2"></i>
+                          <span class="detail-label">Returned:</span>
+                          <span class="detail-value fw-semibold">{{ transaction.return_date|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="status-container">
+                          <span class="status-badge returned">
+                            <i class="fas fa-check-circle me-1"></i>Returned
+                          </span>
+                        </div>
+                        {% else %}
+                        <div class="status-container">
+                          <span class="status-badge borrowed">
+                            <i class="fas fa-clock me-1"></i>Currently Borrowed
+                          </span>
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Statistics Section -->
+      <div class="row mt-4">
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm rounded-4 h-100">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-book-reader fa-3x text-primary"></i>
+              </div>
+              <h5 class="card-title">Total Books Borrowed</h5>
+              <p class="card-text text-muted fs-4 fw-bold">{{ borrowing_history|length }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm rounded-4 h-100">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-clock fa-3x text-warning"></i>
+              </div>
+              <h5 class="card-title">Currently Borrowing</h5>
+              <p class="card-text text-muted fs-4 fw-bold">{{ borrowing_history|length|add:"0" }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    background: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  .card {
+    border: none;
+  }
+  .member-avatar-placeholder {
+    background: #6c757d;
+  }
+  .btn-lg {
+    border-radius: 0.5rem;
+    font-weight: 600;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #4a90e2 0%, #357ABD 100%);
+    border: none;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #357ABD 0%, #4a90e2 100%);
+  }
+  .btn-outline-secondary {
+    border-radius: 0.5rem;
+    border: 2px solid #6c757d;
+    color: #6c757d;
+  }
+  .btn-outline-secondary:hover {
+    background: #e9ecef;
+    color: #495057;
+  }
+  .btn-outline-primary {
+    border-radius: 0.5rem;
+    border: 2px solid #357ABD;
+    color: #357ABD;
+  }
+  .btn-outline-primary:hover {
+    background: #357ABD;
+    color: white;
+  }
+  .badge {
+    font-size: 0.9rem;
+    border-radius: 1rem;
+    font-weight: 600;
+  }
+  h2, h5 {
+    font-weight: 700;
+  }
+
+  /* Member Information Grid Styles */
+  .member-avatar-container {
+    position: relative;
+  }
+
+  .member-avatar-placeholder {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+  }
+
+  .member-avatar-placeholder:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+
+  .member-info-grid {
+    padding-left: 1rem;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background: rgba(248, 249, 250, 0.6);
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+
+  .info-item:hover {
+    background: rgba(74, 144, 226, 0.05);
+    border-color: rgba(74, 144, 226, 0.1);
+    transform: translateX(3px);
+  }
+
+  .info-label {
+    font-weight: 600;
+    color: #6c757d;
+    margin-right: 8px;
+    font-size: 0.9rem;
+    min-width: 80px;
+  }
+
+  .info-value {
+    color: #495057;
+    font-size: 0.95rem;
+    flex: 1;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  /* Responsive adjustments for member info */
+  @media (max-width: 768px) {
+    .member-info-grid {
+      padding-left: 0;
+      margin-top: 1rem;
+    }
+
+    .info-item {
+      padding: 6px 10px;
+      margin-bottom: 6px;
+    }
+
+    .info-label {
+      min-width: 70px;
+      font-size: 0.85rem;
+    }
+
+    .info-value {
+      font-size: 0.9rem;
+    }
+  }
+
+  /* Transaction Box Styles */
+  .transaction-box {
+    background: white;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .transaction-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4a90e2, #357ABD);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .transaction-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: rgba(74, 144, 226, 0.2);
+  }
+
+  .transaction-box:hover::before {
+    opacity: 1;
+  }
+
+  .transaction-icon {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    min-height: 50px;
+    border: 2px solid rgba(74, 144, 226, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .transaction-box:hover .transaction-icon {
+    background: linear-gradient(135deg, #4a90e2 0%, #357ABD 100%);
+    color: white;
+    transform: scale(1.1);
+    border-color: rgba(74, 144, 226, 0.3);
+  }
+
+  .detail-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(248, 249, 250, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+
+  .transaction-box:hover .detail-item {
+    background: rgba(74, 144, 226, 0.05);
+    border-color: rgba(74, 144, 226, 0.1);
+    transform: translateX(5px);
+  }
+
+  .detail-label {
+    font-weight: 600;
+    color: #6c757d;
+    margin-right: 8px;
+    font-size: 0.9rem;
+  }
+
+  .detail-value {
+    color: #495057;
+    font-size: 0.95rem;
+  }
+
+  .status-container {
+    margin-top: 12px;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+
+  .status-badge.returned {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+  }
+
+  .status-badge.borrowed {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+    color: #212529;
+  }
+
+  .transaction-box:hover .status-badge {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  /* Enhanced card title hover effect */
+  .transaction-box:hover .card-title {
+    color: #4a90e2;
+    transition: color 0.3s ease;
+  }
+
+  /* Smooth animations for all elements */
+  .transaction-details {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .transaction-box {
+      margin-bottom: 1rem;
+    }
+
+    .transaction-box:hover {
+      transform: translateY(-2px);
+    }
+
+    .detail-item {
+      padding: 6px 10px;
+    }
+
+    .transaction-icon {
+      min-width: 45px;
+      min-height: 45px;
+      padding: 10px;
+    }
+  }
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .card, .transaction-box {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+  }
+  .btn, .btn-outline-primary, .btn-outline-warning, .btn-outline-danger, .btn-outline-secondary, nav, footer {
+    display: none !important;
+  }
+  .container, .row, .col-lg-8 {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .member-info-grid, .transaction-box {
+    page-break-inside: avoid !important;
+  }
+  .transaction-box {
+    border: 1px solid #000 !important;
+    margin-bottom: 1rem !important;
+  }
+  .transaction-details {
+    color: black !important;
+  }
+  .status-badge {
+    box-shadow: none !important;
+  }
+}
+</style>
+{% endblock %}

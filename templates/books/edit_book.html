@@ -1,0 +1,171 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Edit Book - {{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4 d-flex align-items-center">
+          <i class="fas fa-edit fa-2x me-3"></i>
+          <h2 class="mb-0">Edit Book</h2>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                  <div class="text-danger small">{{ form.title.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="{{ form.author.id_for_label }}" class="form-label">Author</label>
+                {{ form.author }}
+                {% if form.author.errors %}
+                  <div class="text-danger small">{{ form.author.errors.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="{{ form.isbn.id_for_label }}" class="form-label">ISBN</label>
+                {{ form.isbn }}
+                {% if form.isbn.errors %}
+                  <div class="text-danger small">{{ form.isbn.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
+                {{ form.category }}
+                {% if form.category.errors %}
+                  <div class="text-danger small">{{ form.category.errors.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="{{ form.quantity.id_for_label }}" class="form-label">Quantity</label>
+                {{ form.quantity }}
+                {% if form.quantity.errors %}
+                  <div class="text-danger small">{{ form.quantity.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="{{ form.published_date.id_for_label }}" class="form-label">Published Date</label>
+                {{ form.published_date }}
+                {% if form.published_date.errors %}
+                  <div class="text-danger small">{{ form.published_date.errors.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+              {{ form.description }}
+              {% if form.description.errors %}
+                <div class="text-danger small">{{ form.description.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3 form-check">
+              {{ form.availability_status }}
+              <label for="{{ form.availability_status.id_for_label }}" class="form-check-label">
+                Available for borrowing
+              </label>
+              {% if form.availability_status.errors %}
+                <div class="text-danger small">{{ form.availability_status.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <a href="{% url 'book_detail' book.id %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Cancel
+              </a>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Update Book
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    background: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+
+  .card {
+    border: none;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #495057;
+  }
+
+  .form-control {
+    border-radius: 0.5rem;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+
+  .form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  .btn {
+    border-radius: 0.5rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #4a90e2 0%, #357ABD 100%);
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #357ABD 0%, #4a90e2 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-outline-secondary {
+    border: 2px solid #6c757d;
+    color: #6c757d;
+  }
+
+  .btn-outline-secondary:hover {
+    background: #e9ecef;
+    color: #495057;
+    transform: translateY(-2px);
+  }
+
+  .text-danger {
+    font-weight: 500;
+  }
+</style>
+{% endblock %}

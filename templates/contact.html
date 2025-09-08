@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us - Library Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center" style="margin-top: 2rem;">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">
+                    <i class="fas fa-envelope me-2"></i>Contact Us
+                </h2>
+            </div>
+            <div class="card-body">
+                <p class="lead text-muted mb-4">
+                    We'd love to hear from you! Get in touch with us for any questions, feedback, or support.
+                </p>
+
+                <div class="row">
+                    <!-- Contact Information -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 border-0 bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-map-marker-alt fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Visit Us</h5>
+                                <p class="card-text text-muted">
+                                    123 Library Street<br>
+                                    Book City, BC 12345<br>
+                                    United States
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 border-0 bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-phone fa-3x text-success mb-3"></i>
+                                <h5 class="card-title">Call Us</h5>
+                                <p class="card-text text-muted">
+                                    Phone: (555) 123-4567<br>
+                                    Fax: (555) 123-4568<br>
+                                    Mon-Fri: 9AM - 6PM
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 border-0 bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-envelope fa-3x text-info mb-3"></i>
+                                <h5 class="card-title">Email Us</h5>
+                                <p class="card-text text-muted">
+                                    General: info@library.com<br>
+                                    Support: support@library.com<br>
+                                    Admin: admin@library.com
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 border-0 bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+                                <h5 class="card-title">Opening Hours</h5>
+                                <p class="card-text text-muted">
+                                    Monday - Friday: 9:00 AM - 8:00 PM<br>
+                                    Saturday: 10:00 AM - 6:00 PM<br>
+                                    Sunday: 12:00 PM - 5:00 PM
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="card mt-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-paper-plane me-2"></i>Send us a Message
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Your full name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" placeholder="your@email.com" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input type="text" class="form-control" id="subject" placeholder="Message subject" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea class="form-control" id="message" rows="5" placeholder="Your message here..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

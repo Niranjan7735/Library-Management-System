@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Return Book{% endblock %}
+
+{% block content %}
+<h2>Return a Book</h2>
+<form method="POST">
+    {% csrf_token %}
+    <div>
+        <label for="transaction">Select Transaction:</label>
+        <select name="transaction" id="transaction" required>
+            <option value="">Select a transaction</option>
+            {% for transaction in active_transactions %}
+                <option value="{{ transaction.id }}">{{ transaction.book.title }} borrowed by {{ transaction.member.name }} on {{ transaction.borrow_date }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit">Return Book</button>
+</form>
+{% endblock %}

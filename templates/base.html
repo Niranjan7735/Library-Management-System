@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Library Management System{% endblock %}</title>
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold fs-3" href="{% url 'home' %}">
+                <i class="fas fa-book-open me-2"></i>LMS
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        {% if user.is_authenticated and user.is_staff %}
+                        <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                        {% else %}
+                        <a class="nav-link" href="{% url 'home' %}">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book_list' %}">
+                            <i class="fas fa-book me-1"></i>Books
+                        </a>
+                    </li>
+                    {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'member_list' %}">
+                            <i class="fas fa-users me-1"></i>Member Details
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'return_book' %}">
+                            <i class="fas fa-undo me-1"></i>Return Books
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'transaction_history' %}">
+                            <i class="fas fa-history me-1"></i>All Transactions
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            <i class="fas fa-info-circle me-1"></i>About Us
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contact' %}">
+                            <i class="fas fa-envelope me-1"></i>Contact Us
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center ms-auto">
+                    {% if user.is_authenticated %}
+                    <span class="text-light me-3 d-none d-md-block">
+                        <i class="fas fa-user-circle me-1"></i>Hi, {{ user.username }}
+                    </span>
+                    {% if user.is_staff %}
+                    <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-light btn-sm me-2">
+                        <i class="fas fa-cog me-1"></i>Admin
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </a>
+                    {% else %}
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm" style="min-width: 80px; font-size: 0.85rem; padding: 0.375rem 0.75rem;">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a href="{% url 'register' %}" class="btn btn-light btn-sm" style="min-width: 90px; font-size: 0.85rem; padding: 0.375rem 0.75rem;">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content flex-grow-1">
+        <div class="container-fluid mt-5 pt-4">
+            <!-- CSRF Token for AJAX requests -->
+            {% csrf_token %}
+
+            <!-- Django Messages Data for JavaScript -->
+            <div id="django-messages" style="display: none;">
+                {% if messages %}
+                <script type="application/json">
+                    [
+                        {% for message in messages %}
+                        {
+                            "type": "{{ message.tags|title }}",
+                            "message": "{{ message|escapejs }}"
+                        }{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    ]
+                </script>
+                {% else %}
+                <script type="application/json">[]</script>
+                {% endif %}
+            </div>
+
+
+
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer text-center py-3 bg-light shadow-sm border-top">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 Library Management System | Designed by Niranjan</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Toast Notification System -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get Django messages from hidden div
+            const messagesDiv = document.getElementById('django-messages');
+            if (messagesDiv) {
+                try {
+                    const djangoMessages = JSON.parse(messagesDiv.getAttribute('data-messages'));
+                    // Show toast notifications for Django messages
+                    djangoMessages.forEach(function(msg) {
+                        showToast(msg.type, msg.message);
+                    });
+                } catch (e) {
+                    console.log('No messages to display');
+                }
+            }
+        });
+
+        function showToast(type, message) {
+            // Create toast container if it doesn't exist
+            let toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.id = 'toast-container';
+                toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+                toastContainer.style.zIndex = '9999';
+                document.body.appendChild(toastContainer);
+            }
+
+            // Create toast element
+            const toastId = 'toast-' + Date.now();
+            const toastHTML = `
+                <div id="${toastId}" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas ${getIconClass(type)} me-2"></i>
+                            ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+
+            toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+
+            // Initialize and show toast
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement, {
+                autohide: false
+            });
+
+            // Set background color based on type
+            toastElement.classList.add(getBgClass(type));
+
+            toast.show();
+
+            // Remove toast from DOM after it's hidden
+            toastElement.addEventListener('hidden.bs.toast', function() {
+                toastElement.remove();
+            });
+        }
+
+        function getIconClass(type) {
+            switch(type.toLowerCase()) {
+                case 'success':
+                    return 'fa-check-circle';
+                case 'error':
+                    return 'fa-exclamation-circle';
+                case 'warning':
+                    return 'fa-exclamation-triangle';
+                case 'info':
+                    return 'fa-info-circle';
+                default:
+                    return 'fa-info-circle';
+            }
+        }
+
+        function getBgClass(type) {
+            switch(type.toLowerCase()) {
+                case 'success':
+                    return 'bg-success';
+                case 'error':
+                    return 'bg-danger';
+                case 'warning':
+                    return 'bg-warning';
+                case 'info':
+                    return 'bg-info';
+                default:
+                    return 'bg-info';
+            }
+        }
+    </script>
+</body>
+</html>
